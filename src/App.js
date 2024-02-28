@@ -1,23 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import Employee from "./Employee";
 
 function App() {
+  const [count, setCount] = useState(10);
+
+  const numberList = [];
+
+  for (let i = 0; i < count; i++) {
+    numberList.push(
+      <Employee key={i} name={Math.random()} showTime={i === 0} />
+    );
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button
+        type="button"
+        onClick={() => setCount(5 + Math.ceil(Math.random() * 10))}
+      >
+        Click Me!
+      </button>
+      {numberList}
     </div>
   );
 }
