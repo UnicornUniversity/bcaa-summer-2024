@@ -4,21 +4,6 @@ import EventCard from "./EventCard";
 function EventList() {
   const [showFutureOnly, setShowFutureOnly] = useState(true);
 
-  const userList = [
-    {
-      id: "aragorn",
-      name: "Aragorn",
-    },
-    {
-      id: "legolas",
-      name: "Legolas",
-    },
-    {
-      id: "gimli",
-      name: "Gimli",
-    },
-  ];
-
   const eventList = [
     {
       id: "0",
@@ -65,7 +50,7 @@ function EventList() {
         {showFutureOnly ? "Show All" : "Show Future Only"}
       </button>
       {filteredEventList.map((event) => {
-        return <EventCard key={event.id} event={event} userList={userList} />;
+        return <EventCard key={event.id} event={event} />;
       })}
     </div>
   );

@@ -4,8 +4,12 @@ import {
   mdiAccountAlertOutline,
   mdiAccountQuestionOutline,
 } from "@mdi/js";
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
 
-function EventCard({ event, userList }) {
+function EventCard({ event }) {
+  const { userList } = useContext(UserContext);
+
   return (
     <div class="card">
       <div class="card-body">
