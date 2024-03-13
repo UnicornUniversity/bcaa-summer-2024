@@ -18,6 +18,7 @@ function UserProvider({ children }) {
       name: "Gimli",
     },
   ];
+
   const value = {
     userList,
     loggedInUser: loggedInUser
@@ -25,6 +26,7 @@ function UserProvider({ children }) {
       : null,
     handlerMap: {
       login: setLoggedInUser,
+      logout: () => setLoggedInUser(null),
     },
   };
 
@@ -32,4 +34,3 @@ function UserProvider({ children }) {
 }
 
 export default UserProvider;
-// Path: client/src/UserProvider.js
