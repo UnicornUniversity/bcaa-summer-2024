@@ -41,7 +41,7 @@ function timeStyle() {
     justifyContent: "center",
     fontSize: "20px",
     lineHeight: 1,
-    padding: "4px",
+    padding: "4px 4px 8px 4px",
     background: "#187bcd",
     color: "white",
   };

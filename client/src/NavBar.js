@@ -16,12 +16,12 @@ function NavBar() {
   ));
   if (loggedInUser) {
     userMenuItemList.push(
-      <li>
-        <hr class="dropdown-divider" />
+      <li key={"divider"}>
+        <hr className="dropdown-divider" />
       </li>
     );
     userMenuItemList.push(
-      <li>
+      <li key={"logout"}>
         <div className="dropdown-item" onClick={() => handlerMap.logout()}>
           {"Odhlas se"}
         </div>

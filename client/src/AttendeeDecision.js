@@ -3,6 +3,7 @@ import {
   mdiEmoticonHappyOutline,
   mdiEmoticonSadOutline,
   mdiEmoticonNeutralOutline,
+  mdiPlusCircleOutline,
 } from "@mdi/js";
 
 import { useContext } from "react";
@@ -17,11 +18,11 @@ function AttendeeDecision({ event }) {
   let iconPath;
   let color;
   if (loggedInUser && event.willAttend.includes(loggedInUser?.id)) {
-    loggedInUserAttendance = "hraju";
+    loggedInUserAttendance = "jdu";
     iconPath = mdiEmoticonHappyOutline;
     color = "#69a765";
   } else if (loggedInUser && event.willNotAttend.includes(loggedInUser?.id)) {
-    loggedInUserAttendance = "nehraju";
+    loggedInUserAttendance = "nejdu";
     iconPath = mdiEmoticonSadOutline;
     color = "#ff2216";
   } else {
@@ -30,42 +31,71 @@ function AttendeeDecision({ event }) {
     color = "#ffb447";
   }
 
+  const guestsCount = event.guests.filter(
+    (guest) => guest === loggedInUser?.id
+  ).length;
+  const guestsColor = getGuestsCount(guestsCount);
+
   return loggedInUser ? (
-    <div class="dropdown">
-      <button
-        class="dropdown-toggle"
-        type="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-        style={componentStyle(color)}
-      >
-        <Icon path={iconPath} size={0.8} color={color} />
-        {loggedInUserAttendance}
-      </button>
-      <ul class="dropdown-menu">
-        {decisionButton({
-          callFunction: handlerMap.setWillAttend,
-          event,
-          loggedInUser,
-          color: "#69a765",
-          text: "hraju",
-        })}
-        {decisionButton({
-          callFunction: handlerMap.setWillNotAttend,
-          event,
-          loggedInUser,
-          color: "#ff2216",
-          text: "nehraju",
-        })}
-        {decisionButton({
-          callFunction: handlerMap.setNotDecided,
-          event,
-          loggedInUser,
-          color: "#ffb447",
-          text: "nevím",
-        })}
-      </ul>
-    </div>
+    <>
+      <div className="dropdown">
+        <button
+          className="dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          style={componentStyle(color)}
+        >
+          <Icon path={iconPath} size={0.8} color={color} />
+          {loggedInUserAttendance}
+        </button>
+        <ul className="dropdown-menu" style={{ minWidth: "88px" }}>
+          {decisionButton({
+            callFunction: handlerMap.setWillAttend,
+            event,
+            loggedInUser,
+            color: "#69a765",
+            text: "jdu",
+          })}
+          {decisionButton({
+            callFunction: handlerMap.setWillNotAttend,
+            event,
+            loggedInUser,
+            color: "#ff2216",
+            text: "nejdu",
+          })}
+          {decisionButton({
+            callFunction: handlerMap.setNotDecided,
+            event,
+            loggedInUser,
+            color: "#ffb447",
+            text: "nevím",
+          })}
+        </ul>
+      </div>
+      <div className="dropdown">
+        <button
+          className="dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          style={componentStyle(guestsColor)}
+        >
+          <Icon path={mdiPlusCircleOutline} size={0.8} color={guestsColor} />
+          {guestsCount}
+        </button>
+        <ul className="dropdown-menu" style={{ minWidth: "44px" }}>
+          {[0, 1, 2, 3, 4, 5, 6].map((numberOfGuests) => {
+            return guestsButton({
+              callFunction: handlerMap.setGuests,
+              event,
+              loggedInUser,
+              numberOfGuests,
+            });
+          })}
+        </ul>
+      </div>
+    </>
   ) : null;
 }
 
@@ -85,7 +115,7 @@ function decisionButton({ callFunction, event, loggedInUser, color, text }) {
   return (
     <li>
       <button
-        class="dropdown-item"
+        className="dropdown-item"
         style={{ color }}
         onClick={() => callFunction(event.id, loggedInUser.id)}
       >
@@ -93,6 +123,24 @@ function decisionButton({ callFunction, event, loggedInUser, color, text }) {
       </button>
     </li>
   );
+}
+
+function guestsButton({ callFunction, event, loggedInUser, numberOfGuests }) {
+  return (
+    <li key={numberOfGuests.toString()}>
+      <button
+        className="dropdown-item"
+        style={{ color: getGuestsCount(numberOfGuests) }}
+        onClick={() => callFunction(event.id, loggedInUser.id, numberOfGuests)}
+      >
+        {numberOfGuests}
+      </button>
+    </li>
+  );
+}
+
+function getGuestsCount(guestsCount) {
+  return guestsCount > 0 ? "#69a765" : "#707373";
 }
 
 export default AttendeeDecision;

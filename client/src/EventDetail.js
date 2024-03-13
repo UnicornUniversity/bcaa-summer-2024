@@ -7,7 +7,9 @@ function EventDetail({ event }) {
       <div style={{ fontSize: "22px" }}>{event.name}</div>
       <div className="row" style={{ margin: "0" }}>
         <div className="col-12 col-sm-6" style={{ padding: "0" }}>
-          <WillAttendBadge count={event.willAttend.length} />
+          <WillAttendBadge
+            count={event.willAttend.length + event.guests.length}
+          />
         </div>
         <div className="col-12 col-md-6" style={decisionColumnStyle()}>
           <AttendeeDecision event={event} />

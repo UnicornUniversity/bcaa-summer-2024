@@ -36,9 +36,18 @@ function EventListProvider({ children }) {
     setEventList([...eventList]);
   }
 
+  function setGuests(eventId, userId, numberOfGuests) {
+    const event = eventList.find((event) => event.id === eventId);
+    if (event) {
+      event.guests = event.guests.filter((guest) => guest !== userId);
+      for (let i = 0; i < numberOfGuests; i++) event.guests.push(userId);
+    }
+    setEventList([...eventList]);
+  }
+
   const value = {
     eventList,
-    handlerMap: { setWillAttend, setWillNotAttend, setNotDecided },
+    handlerMap: { setWillAttend, setWillNotAttend, setNotDecided, setGuests },
   };
 
   return (
@@ -56,6 +65,7 @@ function getDefaultEventList() {
       name: "Volejbal Třebízkého",
       willAttend: ["aragorn"],
       willNotAttend: ["gimli"],
+      guests: [],
     },
     {
       id: "a",
@@ -63,6 +73,7 @@ function getDefaultEventList() {
       name: "Volejbal Třebízkého",
       willAttend: ["aragorn"],
       willNotAttend: ["gimli"],
+      guests: [],
     },
     {
       id: "b",
@@ -70,6 +81,7 @@ function getDefaultEventList() {
       name: "Volejbal Třebízkého",
       willAttend: ["aragorn"],
       willNotAttend: [],
+      guests: [],
     },
     {
       id: "c",
@@ -77,6 +89,7 @@ function getDefaultEventList() {
       name: "Volejbal Třebízkého",
       willAttend: [],
       willNotAttend: [],
+      guests: [],
     },
     {
       id: "d",
@@ -84,6 +97,7 @@ function getDefaultEventList() {
       name: "Volejbal Třebízkého",
       willAttend: [],
       willNotAttend: [],
+      guests: [],
     },
     {
       id: "e",
@@ -91,6 +105,7 @@ function getDefaultEventList() {
       name: "Volejbal Třebízkého",
       willAttend: [],
       willNotAttend: [],
+      guests: [],
     },
     {
       id: "f",
@@ -98,6 +113,7 @@ function getDefaultEventList() {
       name: "Volejbal Třebízkého",
       willAttend: [],
       willNotAttend: [],
+      guests: [],
     },
     {
       id: "g",
@@ -105,6 +121,7 @@ function getDefaultEventList() {
       name: "Volejbal Třebízkého",
       willAttend: [],
       willNotAttend: [],
+      guests: [],
     },
     {
       id: "h",
@@ -112,6 +129,7 @@ function getDefaultEventList() {
       name: "Volejbal Třebízkého",
       willAttend: [],
       willNotAttend: [],
+      guests: [],
     },
     {
       id: "i",
@@ -119,6 +137,7 @@ function getDefaultEventList() {
       name: "Volejbal Třebízkého",
       willAttend: [],
       willNotAttend: [],
+      guests: [],
     },
     {
       id: "j",
@@ -126,6 +145,7 @@ function getDefaultEventList() {
       name: "Volejbal Třebízkého",
       willAttend: [],
       willNotAttend: [],
+      guests: [],
     },
     {
       id: "k",
@@ -133,6 +153,7 @@ function getDefaultEventList() {
       name: "Volejbal Třebízkého",
       willAttend: [],
       willNotAttend: [],
+      guests: [],
     },
     {
       id: "l",
@@ -140,6 +161,7 @@ function getDefaultEventList() {
       name: "Volejbal Třebízkého",
       willAttend: [],
       willNotAttend: [],
+      guests: [],
     },
     {
       id: "m",
@@ -147,6 +169,7 @@ function getDefaultEventList() {
       name: "Volejbal Třebízkého",
       willAttend: [],
       willNotAttend: [],
+      guests: [],
     },
     {
       id: "n",
@@ -154,6 +177,7 @@ function getDefaultEventList() {
       name: "Volejbal Třebízkého",
       willAttend: [],
       willNotAttend: [],
+      guests: [],
     },
   ];
 }

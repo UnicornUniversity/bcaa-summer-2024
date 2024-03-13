@@ -4,7 +4,7 @@ function WillAttendBadge({ count }) {
   // otherwise the color is green
   let color;
   if (count < 6) color = "#ff2216";
-  else if (count < 8) color = "#ffb447";
+  else if (count < 10) color = "#ffb447";
   else color = "#69a765";
 
   return (
