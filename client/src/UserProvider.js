@@ -1,8 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 
 function UserProvider({ children }) {
   const [loggedInUser, setLoggedInUser] = useState(null);
+  const [loadStatus, setLoadStatus] = useState("ready");
+
+  useEffect(() => {
+    setLoadStatus("loading");
+    setTimeout(() => {
+      setLoadStatus("ready");
+    }, 10000);
+  }, []);
 
   const userList = [
     {
@@ -30,7 +38,14 @@ function UserProvider({ children }) {
     },
   };
 
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  return (
+    <>
+      {loadStatus === "loading" && <div>Loading...</div>}
+      {loadStatus === "ready" && (
+        <UserContext.Provider value={value}>{children}</UserContext.Provider>
+      )}
+    </>
+  );
 }
 
 export default UserProvider;
