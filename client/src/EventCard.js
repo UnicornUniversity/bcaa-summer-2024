@@ -1,32 +1,24 @@
-import Icon from "@mdi/react";
-import {
-  mdiAccountCheckOutline,
-  mdiAccountAlertOutline,
-  mdiAccountQuestionOutline,
-} from "@mdi/js";
-import { useContext } from "react";
-import { UserContext } from "./UserContext";
+import EventDateTimeBadge from "./EventDateTimeBadge";
+import EventDetail from "./EventDetail";
 
 function EventCard({ event }) {
-  const { userList } = useContext(UserContext);
-
   return (
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">{`${event.date} (${event.name})`}</h5>
-        <div class="card-text">
-          <Icon path={mdiAccountCheckOutline} size={1} color={"green"} />
-          {event.willAttend.length} /
-          <Icon path={mdiAccountAlertOutline} size={1} color={"red"} />
-          {event.willNotAttend.length} /
-          <Icon path={mdiAccountQuestionOutline} size={1} color={"orange"} />
-          {userList.length -
-            event.willAttend.length -
-            event.willNotAttend.length}
-        </div>
-      </div>
+    <div className="card border-0 shadow rounded" style={componentStyle()}>
+      <EventDateTimeBadge event={event} />
+      <EventDetail event={event} />
     </div>
   );
+}
+
+function componentStyle() {
+  return {
+    margin: "12px auto",
+    padding: "8px",
+    display: "grid",
+    gridTemplateColumns: "max-content auto",
+    columnGap: "8px",
+    maxWidth: "640px",
+  };
 }
 
 export default EventCard;
