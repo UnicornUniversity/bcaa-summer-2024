@@ -1,0 +1,7 @@
+[
+  { "id": "aragorn", "name": "Aragorn" },
+  { "id": "legolas", "name": "Legolas" },
+  { "id": "gimli", "name": "Gimli" },
+  { "id": "frodo", "name": "FFrodo" },
+  { "id": "samwise", "lorem": "ipsum", "město": "Praha" }
+]
