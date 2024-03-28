@@ -5,6 +5,8 @@ function UserProvider({ children }) {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [loadStatus, setLoadStatus] = useState("ready");
 
+  console.log(loadStatus);
+
   useEffect(() => {
     setLoadStatus("loading");
     setTimeout(() => {

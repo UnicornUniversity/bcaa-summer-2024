@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { UserContext } from "./UserContext";
 import Icon from "@mdi/react";
-import { mdiVolleyball } from "@mdi/js";
+import { mdiVolleyball, mdiLogout } from "@mdi/js";
 
 function NavBar() {
   const { userList, loggedInUser, handlerMap } = useContext(UserContext);
@@ -22,7 +22,12 @@ function NavBar() {
     );
     userMenuItemList.push(
       <li key={"logout"}>
-        <div className="dropdown-item" onClick={() => handlerMap.logout()}>
+        <div
+          className="dropdown-item"
+          style={{ color: "red" }}
+          onClick={() => handlerMap.logout()}
+        >
+          <Icon path={mdiLogout} size={1} color={"red"} />
           {"Odhlas se"}
         </div>
       </li>
@@ -34,7 +39,7 @@ function NavBar() {
       <div className="container-fluid">
         <a className="navbar-brand me-auto d-flex text-light" href="/">
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <Icon path={mdiVolleyball} size={1} color={"white"} />
+            <Icon path={mdiVolleyball} size={1} color={"white"} spin={5} />
             VOLEJBALALÁCI
           </div>
         </a>

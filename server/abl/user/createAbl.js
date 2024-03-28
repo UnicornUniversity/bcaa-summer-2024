@@ -8,15 +8,14 @@ const userDao = require("../../dao/user-dao.js");
 const schema = {
   type: "object",
   properties: {
-    id: { type: "string" },
     name: { type: "string" },
     email: { type: "string" },
   },
-  required: ["id"],
+  required: ["name", "email"],
   additionalProperties: false,
 };
 
-async function UpdateAbl(req, res) {
+async function CreateAbl(req, res) {
   try {
     let user = req.body;
 
@@ -32,9 +31,7 @@ async function UpdateAbl(req, res) {
     }
 
     const userList = userDao.list();
-    const emailExists = userList.some(
-      (u) => u.email === user.email && u.id !== user.id
-    );
+    const emailExists = userList.some((u) => u.email === user.email);
     if (emailExists) {
       res.status(400).json({
         code: "emailAlreadyExists",
@@ -43,20 +40,11 @@ async function UpdateAbl(req, res) {
       return;
     }
 
-    const updatedUser = userDao.update(user);
-
-    if (!updatedUser) {
-      res.status(404).json({
-        code: "userNotFound",
-        message: `User ${user.id} not found`,
-      });
-      return;
-    }
-
-    res.json(updatedUser);
+    user = userDao.create(user);
+    res.json(user);
   } catch (e) {
     res.status(500).json({ message: e.message });
   }
 }
 
-module.exports = UpdateAbl;
+module.exports = CreateAbl;

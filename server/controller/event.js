@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-const GetAbl = require("../abl/user/getAbl");
-const ListAbl = require("../abl/user/listAbl");
-const CreateAbl = require("../abl/user/createAbl");
-const UpdateAbl = require("../abl/user/updateAbl");
-const DeleteAbl = require("../abl/user/deleteAbl");
+const GetAbl = require("../abl/event/getAbl");
+const ListAbl = require("../abl/event/listAbl");
+const CreateAbl = require("../abl/event/createAbl");
+const UpdateAbl = require("../abl/event/updateAbl");
+const DeleteAbl = require("../abl/event/deleteAbl");
 
 router.get("/get", (req, res) => {
   GetAbl(req, res);
