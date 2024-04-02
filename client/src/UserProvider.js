@@ -2,37 +2,32 @@ import { useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 
 function UserProvider({ children }) {
+  const [userListDto, setUserListDto] = useState({
+    state: "ready",
+    data: null,
+  });
   const [loggedInUser, setLoggedInUser] = useState(null);
-  const [loadStatus, setLoadStatus] = useState("ready");
-
-  console.log(loadStatus);
 
   useEffect(() => {
-    setLoadStatus("loading");
-    setTimeout(() => {
-      setLoadStatus("ready");
-    }, 10000);
+    setUserListDto((current) => ({ ...current, state: "loading" }));
+    fetch(`http://localhost:3000/user/list`, {
+      method: "GET",
+    }).then(async (response) => {
+      const responseJson = await response.json();
+      if (response.status >= 400) {
+        setUserListDto({ state: "error", error: responseJson.error });
+      } else {
+        setUserListDto({ state: "ready", data: responseJson });
+      }
+    });
   }, []);
 
-  const userList = [
-    {
-      id: "aragorn",
-      name: "Aragorn",
-    },
-    {
-      id: "legolas",
-      name: "Legolas",
-    },
-    {
-      id: "gimli",
-      name: "Gimli",
-    },
-  ];
+  console.log(userListDto);
 
   const value = {
-    userList,
+    userList: userListDto.data || [],
     loggedInUser: loggedInUser
-      ? userList.find((user) => user.id === loggedInUser)
+      ? (userListDto.data || []).find((user) => user.id === loggedInUser)
       : null,
     handlerMap: {
       login: setLoggedInUser,
@@ -42,8 +37,8 @@ function UserProvider({ children }) {
 
   return (
     <>
-      {loadStatus === "loading" && <div>Loading...</div>}
-      {loadStatus === "ready" && (
+      {userListDto.state === "loading" && <div>Loading...</div>}
+      {userListDto.state === "ready" && (
         <UserContext.Provider value={value}>{children}</UserContext.Provider>
       )}
     </>

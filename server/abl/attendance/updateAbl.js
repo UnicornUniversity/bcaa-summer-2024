@@ -33,6 +33,7 @@ async function UpdateAbl(req, res) {
       });
       return;
     }
+
     // check if user exists
     const user = userDao.get(attendance.userId);
     if (!user) {
@@ -42,6 +43,7 @@ async function UpdateAbl(req, res) {
       });
       return;
     }
+
     // check if event exists
     const event = eventDao.get(attendance.eventId);
     if (!event) {
