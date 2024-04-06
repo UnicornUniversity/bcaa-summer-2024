@@ -69,6 +69,7 @@ function list() {
       );
       return JSON.parse(fileData);
     });
+    eventList.sort((a, b) => new Date(a.date) - new Date(b.date));
     return eventList;
   } catch (error) {
     throw { code: "failedToListEvents", message: error.message };

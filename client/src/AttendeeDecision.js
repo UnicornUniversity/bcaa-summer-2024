@@ -1,3 +1,9 @@
+import Dropdown from "react-bootstrap/Dropdown";
+
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
+import { EventListContext } from "./EventListContext";
+
 import Icon from "@mdi/react";
 import {
   mdiEmoticonHappyOutline,
@@ -6,85 +12,66 @@ import {
   mdiPlusCircleOutline,
 } from "@mdi/js";
 
-import { useContext } from "react";
-import { UserContext } from "./UserContext";
-import { EventListContext } from "./EventListContext";
-
 function AttendeeDecision({ event }) {
   const { loggedInUser } = useContext(UserContext);
   const { handlerMap } = useContext(EventListContext);
 
-  let loggedInUserAttendance;
-  let iconPath;
-  let color;
-  if (loggedInUser && event.willAttend.includes(loggedInUser?.id)) {
-    loggedInUserAttendance = "jdu";
-    iconPath = mdiEmoticonHappyOutline;
-    color = "#69a765";
-  } else if (loggedInUser && event.willNotAttend.includes(loggedInUser?.id)) {
-    loggedInUserAttendance = "nejdu";
-    iconPath = mdiEmoticonSadOutline;
-    color = "#ff2216";
-  } else {
-    loggedInUserAttendance = "nevím";
-    iconPath = mdiEmoticonNeutralOutline;
-    color = "#ffb447";
-  }
-
-  const guestsCount = event.guests.filter(
-    (guest) => guest === loggedInUser?.id
-  ).length;
+  const loggedInUserAttendance = getLoggedInUserAttendance(event, loggedInUser);
+  const guestsCount = event.userMap?.[loggedInUser?.id]?.guests || 0;
   const guestsColor = getGuestsCount(guestsCount);
 
   return loggedInUser ? (
     <>
-      <div className="dropdown">
-        <button
-          className="dropdown-toggle"
-          type="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-          style={componentStyle(color)}
+      <Dropdown>
+        <Dropdown.Toggle
+          id="attencanceDecision"
+          variant="light"
+          style={dropdownStyle()}
         >
-          <Icon path={iconPath} size={0.8} color={color} />
-          {loggedInUserAttendance}
-        </button>
-        <ul className="dropdown-menu" style={{ minWidth: "88px" }}>
+          <Icon
+            path={loggedInUserAttendance.iconPath}
+            size={0.8}
+            color={loggedInUserAttendance.color}
+          />{" "}
+          <span style={componentStyle(loggedInUserAttendance.color)}>
+            {loggedInUserAttendance.attendance}
+          </span>
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
           {decisionButton({
-            callFunction: handlerMap.setWillAttend,
+            handlerMap,
             event,
             loggedInUser,
             color: "#69a765",
             text: "jdu",
           })}
           {decisionButton({
-            callFunction: handlerMap.setWillNotAttend,
+            handlerMap,
             event,
             loggedInUser,
             color: "#ff2216",
             text: "nejdu",
           })}
           {decisionButton({
-            callFunction: handlerMap.setNotDecided,
+            handlerMap,
             event,
             loggedInUser,
             color: "#ffb447",
             text: "nevím",
           })}
-        </ul>
-      </div>
-      <div className="dropdown">
-        <button
-          className="dropdown-toggle"
-          type="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-          style={componentStyle(guestsColor)}
+        </Dropdown.Menu>
+      </Dropdown>
+
+      <Dropdown>
+        <Dropdown.Toggle
+          id="plusGuests"
+          variant="light"
+          style={dropdownStyle()}
         >
-          <Icon path={mdiPlusCircleOutline} size={0.8} color={guestsColor} />
-          {guestsCount}
-        </button>
-        <ul className="dropdown-menu" style={{ minWidth: "44px" }}>
+          <Icon path={mdiPlusCircleOutline} size={0.8} color={guestsColor} />{" "}
+          <span style={componentStyle(guestsColor)}>{guestsCount}</span>
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
           {[0, 1, 2, 3, 4, 5, 6].map((numberOfGuests) => {
             return guestsButton({
               callFunction: handlerMap.setGuests,
@@ -93,49 +80,73 @@ function AttendeeDecision({ event }) {
               numberOfGuests,
             });
           })}
-        </ul>
-      </div>
+        </Dropdown.Menu>
+      </Dropdown>
     </>
   ) : null;
 }
 
-function componentStyle(color) {
+function dropdownStyle() {
   return {
-    border: "none",
-    background: "none",
-    fontSize: "18px",
-    color: color,
     display: "flex",
     alignItems: "center",
-    columnGap: "4px",
+    gap: "4px",
+    background: "none",
+    border: "none",
+  };
+}
+
+function getLoggedInUserAttendance(event, loggedInUser) {
+  let attendance;
+  let iconPath;
+  let color;
+  if (loggedInUser && event.userMap?.[loggedInUser?.id]?.attendance === "yes") {
+    attendance = "jdu";
+    iconPath = mdiEmoticonHappyOutline;
+    color = "#69a765";
+  } else if (
+    loggedInUser &&
+    event.userMap?.[loggedInUser?.id]?.attendance === "no"
+  ) {
+    attendance = "nejdu";
+    iconPath = mdiEmoticonSadOutline;
+    color = "#ff2216";
+  } else {
+    attendance = "nevím";
+    iconPath = mdiEmoticonNeutralOutline;
+    color = "#ffb447";
+  }
+  return { attendance, iconPath, color };
+}
+
+function componentStyle(color) {
+  return {
+    fontSize: "18px",
+    color: color,
   };
 }
 
 function decisionButton({ callFunction, event, loggedInUser, color, text }) {
   return (
-    <li>
-      <button
-        className="dropdown-item"
-        style={{ color }}
-        onClick={() => callFunction(event.id, loggedInUser.id)}
-      >
-        {text}
-      </button>
-    </li>
+    <Dropdown.Item
+      key={text}
+      style={{ color }}
+      onClick={() => callFunction(event.id, loggedInUser.id)}
+    >
+      {text}
+    </Dropdown.Item>
   );
 }
 
 function guestsButton({ callFunction, event, loggedInUser, numberOfGuests }) {
   return (
-    <li key={numberOfGuests.toString()}>
-      <button
-        className="dropdown-item"
-        style={{ color: getGuestsCount(numberOfGuests) }}
-        onClick={() => callFunction(event.id, loggedInUser.id, numberOfGuests)}
-      >
-        {numberOfGuests}
-      </button>
-    </li>
+    <Dropdown.Item
+      key={numberOfGuests.toString()}
+      style={{ color: getGuestsCount(numberOfGuests) }}
+      onClick={() => callFunction(event.id, loggedInUser.id, numberOfGuests)}
+    >
+      {numberOfGuests}
+    </Dropdown.Item>
   );
 }
 

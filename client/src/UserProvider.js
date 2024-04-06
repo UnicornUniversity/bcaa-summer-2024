@@ -22,8 +22,6 @@ function UserProvider({ children }) {
     });
   }, []);
 
-  console.log(userListDto);
-
   const value = {
     userList: userListDto.data || [],
     loggedInUser: loggedInUser
@@ -37,10 +35,7 @@ function UserProvider({ children }) {
 
   return (
     <>
-      {userListDto.state === "loading" && <div>Loading...</div>}
-      {userListDto.state === "ready" && (
-        <UserContext.Provider value={value}>{children}</UserContext.Provider>
-      )}
+      <UserContext.Provider value={value}>{children}</UserContext.Provider>
     </>
   );
 }
