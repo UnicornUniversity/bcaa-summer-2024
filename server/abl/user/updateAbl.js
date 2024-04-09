@@ -44,7 +44,6 @@ async function UpdateAbl(req, res) {
     }
 
     const updatedUser = userDao.update(user);
-
     if (!updatedUser) {
       res.status(404).json({
         code: "userNotFound",

@@ -51,9 +51,7 @@ function remove(eventId) {
     fs.unlinkSync(filePath);
     return {};
   } catch (error) {
-    if (error.code === "ENOENT") {
-      return {};
-    }
+    if (error.code === "ENOENT") return {};
     throw { code: "failedToRemoveEvent", message: error.message };
   }
 }

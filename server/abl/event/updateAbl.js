@@ -33,7 +33,6 @@ async function UpdateAbl(req, res) {
     }
 
     const updatedEvent = eventDao.update(event);
-
     if (!updatedEvent) {
       res.status(404).json({
         code: "eventNotFound",

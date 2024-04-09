@@ -72,6 +72,7 @@ function EventListProvider({ children }) {
           (e) => e.id === responseJson.id
         );
         current.data[eventIndex] = responseJson;
+        current.data.sort((a, b) => new Date(a.date) - new Date(b.date));
         return { state: "ready", data: current.data };
       });
       return responseJson;

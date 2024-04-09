@@ -16,34 +16,9 @@ const schema = {
   additionalProperties: false,
 };
 
-const changeRequestCreateSchema = {
-  type: "object",
-  properties: {
-    description: { type: "string" },
-    author: { type: "string" },
-    changes: {
-      type: "array",
-      items: [
-        {
-          type: "object",
-          properties: {
-            start: {
-              type: "number",
-            },
-          },
-        },
-      ],
-    },
-  },
-  required: ["description", "author", "changes"],
-  additionalProperties: false,
-};
-
 async function CreateAbl(req, res) {
   try {
     let event = req.body;
-
-    const validA = ajv.validate(changeRequestCreateSchema, {});
 
     // validate input
     const valid = ajv.validate(schema, event);
