@@ -21,7 +21,7 @@ function EventList() {
   return (
     <Container>
       <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>
-        <Button variant="success" onClick={() => setShowEventForm(true)}>
+        <Button variant="success" onClick={() => setShowEventForm({})}>
           <Icon path={mdiPlusBoxOutline} size={1} color={"white"} /> Nová
           událost
         </Button>
@@ -30,9 +30,17 @@ function EventList() {
           Nové události
         </Button>
       </div>
-      {showEventForm ? <EventForm setShowEventForm={setShowEventForm} /> : null}
+      {!!showEventForm ? (
+        <EventForm event={showEventForm} setShowEventForm={setShowEventForm} />
+      ) : null}
       {filteredEventList.map((event) => {
-        return <EventCard key={event.id} event={event} />;
+        return (
+          <EventCard
+            key={event.id}
+            event={event}
+            setShowEventForm={setShowEventForm}
+          />
+        );
       })}
     </Container>
   );

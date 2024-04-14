@@ -74,7 +74,7 @@ function AttendeeDecision({ event }) {
         <Dropdown.Menu>
           {[0, 1, 2, 3, 4, 5, 6].map((numberOfGuests) => {
             return guestsButton({
-              callFunction: handlerMap.setGuests,
+              handlerMap,
               event,
               loggedInUser,
               numberOfGuests,
@@ -126,24 +126,40 @@ function componentStyle(color) {
   };
 }
 
-function decisionButton({ callFunction, event, loggedInUser, color, text }) {
+function decisionButton({ handlerMap, event, loggedInUser, color, text }) {
+  const userAttendance = event.userMap?.[loggedInUser?.id];
   return (
     <Dropdown.Item
       key={text}
       style={{ color }}
-      onClick={() => callFunction(event.id, loggedInUser.id)}
+      onClick={() =>
+        handlerMap.handleAttendance({
+          eventId: event.id,
+          userId: loggedInUser.id,
+          guests: userAttendance?.guests,
+          attendance: text === "jdu" ? "yes" : text === "nejdu" ? "no" : null,
+        })
+      }
     >
       {text}
     </Dropdown.Item>
   );
 }
 
-function guestsButton({ callFunction, event, loggedInUser, numberOfGuests }) {
+function guestsButton({ handlerMap, event, loggedInUser, numberOfGuests }) {
+  const userAttendance = event.userMap?.[loggedInUser?.id];
   return (
     <Dropdown.Item
       key={numberOfGuests.toString()}
       style={{ color: getGuestsCount(numberOfGuests) }}
-      onClick={() => callFunction(event.id, loggedInUser.id, numberOfGuests)}
+      onClick={() =>
+        handlerMap.handleAttendance({
+          eventId: event.id,
+          userId: loggedInUser.id,
+          attendance: userAttendance?.attendance,
+          guests: numberOfGuests,
+        })
+      }
     >
       {numberOfGuests}
     </Dropdown.Item>

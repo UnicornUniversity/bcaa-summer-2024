@@ -10,7 +10,7 @@ import Alert from "react-bootstrap/Alert";
 import Icon from "@mdi/react";
 import { mdiLoading } from "@mdi/js";
 
-function EventForm({ setShowEventForm }) {
+function EventForm({ setShowEventForm, event }) {
   const { state, handlerMap } = useContext(EventListContext);
   const [showAlert, setShowAlert] = useState(null);
   const isPending = state === "pending";
@@ -23,7 +23,15 @@ function EventForm({ setShowEventForm }) {
           e.stopPropagation();
           var formData = new FormData(e.target);
           try {
-            await handlerMap.handleCreate(Object.fromEntries(formData));
+            if (event.id) {
+              await handlerMap.handleUpdate({
+                ...Object.fromEntries(formData),
+                id: event.id,
+              });
+            } else {
+              await handlerMap.handleCreate(Object.fromEntries(formData));
+            }
+
             setShowEventForm(false);
           } catch (e) {
             console.log(e);
@@ -32,7 +40,9 @@ function EventForm({ setShowEventForm }) {
         }}
       >
         <Modal.Header>
-          <Modal.Title>Vytvořit událost</Modal.Title>
+          <Modal.Title>{`${
+            event.id ? "Upravit" : "Vytvořit"
+          } událost`}</Modal.Title>
           <CloseButton onClick={() => setShowEventForm(false)} />
         </Modal.Header>
         <Modal.Body style={{ position: "relative" }}>
@@ -54,11 +64,21 @@ function EventForm({ setShowEventForm }) {
 
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Datum konání</Form.Label>
-            <Form.Control type="datetime-local" name="date" required />
+            <Form.Control
+              type="datetime-local"
+              name="date"
+              // required
+              defaultValue={event.date}
+            />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Název událost</Form.Label>
-            <Form.Control type="text" name="name" required />
+            <Form.Control
+              type="text"
+              name="name"
+              // required
+              defaultValue={event.name}
+            />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
@@ -70,7 +90,7 @@ function EventForm({ setShowEventForm }) {
             Zavřít
           </Button>
           <Button type="submit" variant="primary" disabled={isPending}>
-            Vytvořit
+            {event.id ? "Upravit" : "Vytvořit"}
           </Button>
         </Modal.Footer>
       </Form>
