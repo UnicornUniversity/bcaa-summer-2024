@@ -34,7 +34,7 @@ function EventForm({ setShowEventForm, event }) {
 
             setShowEventForm(false);
           } catch (e) {
-            console.log(e);
+            console.error(e);
             setShowAlert(e.message);
           }
         }}
@@ -67,7 +67,7 @@ function EventForm({ setShowEventForm, event }) {
             <Form.Control
               type="datetime-local"
               name="date"
-              // required
+              required
               defaultValue={event.date}
             />
           </Form.Group>
@@ -76,7 +76,7 @@ function EventForm({ setShowEventForm, event }) {
             <Form.Control
               type="text"
               name="name"
-              // required
+              required
               defaultValue={event.name}
             />
           </Form.Group>
