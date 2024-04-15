@@ -21,10 +21,10 @@ const schema = {
 
 async function UpdateAbl(req, res) {
   try {
-    let attendance = req.body;
+    let dtoIn = req.body;
 
     // validate input
-    const valid = ajv.validate(schema, attendance);
+    const valid = ajv.validate(schema, dtoIn);
     if (!valid) {
       res.status(400).json({
         code: "dtoInIsNotValid",
@@ -35,28 +35,29 @@ async function UpdateAbl(req, res) {
     }
 
     // check if user exists
-    const user = userDao.get(attendance.userId);
+    const user = userDao.get(dtoIn.userId);
     if (!user) {
       res.status(404).json({
         code: "userNotFound",
-        message: `User ${attendance.userId} not found`,
+        message: `User ${dtoIn.userId} not found`,
       });
       return;
     }
 
     // check if event exists
-    const event = eventDao.get(attendance.eventId);
+    const event = eventDao.get(dtoIn.eventId);
     if (!event) {
       res.status(404).json({
         code: "eventNotFound",
-        message: `Event ${attendance.eventId} not found`,
+        message: `Event ${dtoIn.eventId} not found`,
       });
       return;
     }
-    attendance.attendance = attendance.attendance || "null";
-    attendance.guests = attendance.guests || 0;
 
-    if (attendance.attendance === "null" && attendance.guests === 0) {
+    let attendance = attendanceDao.get(dtoIn.userId, dtoIn.eventId);
+    attendance = { ...attendance, ...dtoIn };
+
+    if (!attendance.attendance && !attendance.guests) {
       attendanceDao.remove(attendance.userId, attendance.eventId);
     } else {
       attendance = attendanceDao.update(attendance);

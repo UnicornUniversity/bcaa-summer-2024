@@ -10,7 +10,7 @@ function UserProvider({ children }) {
 
   useEffect(() => {
     setUserListDto((current) => ({ ...current, state: "loading" }));
-    fetch(`http://localhost:3000/user/list`, {
+    fetch(`http://localhost:8000/user/list`, {
       method: "GET",
     }).then(async (response) => {
       const responseJson = await response.json();

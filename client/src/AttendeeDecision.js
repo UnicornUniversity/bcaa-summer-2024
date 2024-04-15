@@ -127,7 +127,6 @@ function componentStyle(color) {
 }
 
 function decisionButton({ handlerMap, event, loggedInUser, color, text }) {
-  const userAttendance = event.userMap?.[loggedInUser?.id];
   return (
     <Dropdown.Item
       key={text}
@@ -136,7 +135,6 @@ function decisionButton({ handlerMap, event, loggedInUser, color, text }) {
         handlerMap.handleAttendance({
           eventId: event.id,
           userId: loggedInUser.id,
-          guests: userAttendance?.guests,
           attendance: text === "jdu" ? "yes" : text === "nejdu" ? "no" : null,
         })
       }
@@ -147,7 +145,6 @@ function decisionButton({ handlerMap, event, loggedInUser, color, text }) {
 }
 
 function guestsButton({ handlerMap, event, loggedInUser, numberOfGuests }) {
-  const userAttendance = event.userMap?.[loggedInUser?.id];
   return (
     <Dropdown.Item
       key={numberOfGuests.toString()}
@@ -156,7 +153,6 @@ function guestsButton({ handlerMap, event, loggedInUser, numberOfGuests }) {
         handlerMap.handleAttendance({
           eventId: event.id,
           userId: loggedInUser.id,
-          attendance: userAttendance?.attendance,
           guests: numberOfGuests,
         })
       }

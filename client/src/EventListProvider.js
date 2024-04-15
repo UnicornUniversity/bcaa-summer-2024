@@ -14,7 +14,7 @@ function EventListProvider({ children }) {
 
   async function handleLoad() {
     setEventLoadObject((current) => ({ ...current, state: "pending" }));
-    const response = await fetch(`http://localhost:3000/event/list`, {
+    const response = await fetch(`http://localhost:8000/event/list`, {
       method: "GET",
     });
     const responseJson = await response.json();
@@ -33,7 +33,7 @@ function EventListProvider({ children }) {
 
   async function handleCreate(dtoIn) {
     setEventLoadObject((current) => ({ ...current, state: "pending" }));
-    const response = await fetch(`http://localhost:3000/event/create`, {
+    const response = await fetch(`http://localhost:8000/event/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +59,7 @@ function EventListProvider({ children }) {
 
   async function handleUpdate(dtoIn) {
     setEventLoadObject((current) => ({ ...current, state: "pending" }));
-    const response = await fetch(`http://localhost:3000/event/update`, {
+    const response = await fetch(`http://localhost:8000/event/update`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dtoIn),
@@ -88,7 +88,7 @@ function EventListProvider({ children }) {
 
   async function handleAttendance(dtoIn) {
     setEventLoadObject((current) => ({ ...current, state: "pending" }));
-    const response = await fetch(`http://localhost:3000/attendance/update`, {
+    const response = await fetch(`http://localhost:8000/attendance/update`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dtoIn),
