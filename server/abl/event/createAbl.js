@@ -1,7 +1,7 @@
 const Ajv = require("ajv");
+const addFormats = require("ajv-formats").default;
 const ajv = new Ajv();
-const validateDateTime = require("../../helpers/validate-date-time.js");
-ajv.addFormat("date-time", { validate: validateDateTime });
+addFormats(ajv);
 
 const eventDao = require("../../dao/event-dao.js");
 
@@ -9,7 +9,7 @@ const schema = {
   type: "object",
   properties: {
     date: { type: "string", format: "date-time" },
-    name: { type: "string" },
+    name: { type: "string", minLength: 3 },
     desc: { type: "string" },
   },
   required: ["date", "name"],

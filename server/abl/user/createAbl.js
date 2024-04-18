@@ -1,5 +1,8 @@
 const Ajv = require("ajv");
+const addFormats = require("ajv-formats").default;
 const ajv = new Ajv();
+addFormats(ajv);
+
 const validateDateTime = require("../../helpers/validate-date-time.js");
 ajv.addFormat("date-time", { validate: validateDateTime });
 
@@ -8,8 +11,8 @@ const userDao = require("../../dao/user-dao.js");
 const schema = {
   type: "object",
   properties: {
-    name: { type: "string" },
-    email: { type: "string" },
+    name: { type: "string", minLength: 3 },
+    email: { type: "string", format: "email" },
   },
   required: ["name", "email"],
   additionalProperties: false,

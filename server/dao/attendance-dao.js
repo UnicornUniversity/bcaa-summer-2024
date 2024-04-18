@@ -10,7 +10,7 @@ function get(userId, eventId) {
     const attendance = attendanceList.find(
       (a) => a.userId === userId && a.eventId === eventId
     );
-    return attendance || { userId, eventId };
+    return attendance;
   } catch (error) {
     throw { code: "failedToReadAttendance", message: error.message };
   }

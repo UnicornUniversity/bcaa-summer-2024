@@ -1,12 +1,15 @@
 const Ajv = require("ajv");
+const addFormats = require("ajv-formats").default;
 const ajv = new Ajv();
+addFormats(ajv);
+
 const eventDao = require("../../dao/event-dao.js");
 const attendanceDao = require("../../dao/attendance-dao.js");
 
 const schema = {
   type: "object",
   properties: {
-    id: { type: "string" },
+    id: { type: "string", minLength: 32, maxLength: 32 },
   },
   required: ["id"],
   additionalProperties: false,

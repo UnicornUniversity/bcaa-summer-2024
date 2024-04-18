@@ -1,7 +1,5 @@
 const Ajv = require("ajv");
 const ajv = new Ajv();
-const validateDateTime = require("../../helpers/validate-date-time.js");
-ajv.addFormat("date-time", { validate: validateDateTime });
 
 const userDao = require("../../dao/user-dao.js");
 const eventDao = require("../../dao/event-dao.js");
@@ -10,8 +8,8 @@ const attendanceDao = require("../../dao/attendance-dao.js");
 const schema = {
   type: "object",
   properties: {
-    eventId: { type: "string" },
-    userId: { type: "string" },
+    eventId: { type: "string", minLength: 32, maxLength: 32 },
+    userId: { type: "string", minLength: 32, maxLength: 32 },
     attendance: { enum: ["yes", "no", null] },
     guests: { enum: [0, 1, 2, 3, 4, 5, 6] },
   },
@@ -55,7 +53,7 @@ async function UpdateAbl(req, res) {
     }
 
     let attendance = attendanceDao.get(dtoIn.userId, dtoIn.eventId);
-    attendance = { ...attendance, ...dtoIn };
+    attendance = { ...(attendance || {}), ...dtoIn };
 
     if (!attendance.attendance && !attendance.guests) {
       attendanceDao.remove(attendance.userId, attendance.eventId);

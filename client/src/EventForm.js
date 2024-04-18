@@ -21,15 +21,14 @@ function EventForm({ setShowEventForm, event }) {
         onSubmit={async (e) => {
           e.preventDefault();
           e.stopPropagation();
-          var formData = new FormData(e.target);
+          var formData = Object.fromEntries(new FormData(e.target));
+          formData.date = new Date(formData.date).toISOString();
           try {
             if (event.id) {
-              await handlerMap.handleUpdate({
-                ...Object.fromEntries(formData),
-                id: event.id,
-              });
+              formData.id = event.id;
+              await handlerMap.handleUpdate(formData);
             } else {
-              await handlerMap.handleCreate(Object.fromEntries(formData));
+              await handlerMap.handleCreate(formData);
             }
 
             setShowEventForm(false);
@@ -68,7 +67,9 @@ function EventForm({ setShowEventForm, event }) {
               type="datetime-local"
               name="date"
               required
-              defaultValue={event.date}
+              defaultValue={
+                event.date ? eventDateToInput(event.date) : undefined
+              }
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -111,6 +112,16 @@ function pendingStyle() {
     backgroundColor: "white",
     opacity: "0.5",
   };
+}
+
+function eventDateToInput(date) {
+  date = new Date(date);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
 export default EventForm;

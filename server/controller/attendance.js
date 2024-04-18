@@ -3,8 +3,6 @@ const router = express.Router();
 
 const UpdateAbl = require("../abl/attendance/updateAbl");
 
-router.post("/update", (req, res) => {
-  UpdateAbl(req, res);
-});
+router.post("/update", UpdateAbl);
 
 module.exports = router;

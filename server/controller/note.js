@@ -7,24 +7,10 @@ const CreateAbl = require("../abl/note/createAbl");
 const UpdateAbl = require("../abl/note/updateAbl");
 const DeleteAbl = require("../abl/note/deleteAbl");
 
-router.get("/get", (req, res) => {
-  GetAbl(req, res);
-});
-
-router.get("/list", (req, res) => {
-  ListAbl(req, res);
-});
-
-router.post("/create", (req, res) => {
-  CreateAbl(req, res);
-});
-
-router.post("/update", (req, res) => {
-  UpdateAbl(req, res);
-});
-
-router.post("/delete", (req, res) => {
-  DeleteAbl(req, res);
-});
+router.get("/get", GetAbl);
+router.get("/list", ListAbl);
+router.post("/create", CreateAbl);
+router.post("/update", UpdateAbl);
+router.post("/delete", DeleteAbl);
 
 module.exports = router;
