@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import { useContext } from "react";
 import { UserContext } from "./UserContext";
 
@@ -8,18 +10,20 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 
 import Icon from "@mdi/react";
 import { mdiVolleyball, mdiLogout } from "@mdi/js";
+import Button from "react-bootstrap/esm/Button";
 
 function NavBar() {
   const { userList, loggedInUser, handlerMap } = useContext(UserContext);
+  const navigate = useNavigate();
 
   return (
     <Navbar expand="lg" style={componentStyle()}>
       <Container>
-        <Navbar.Brand href="/">
-          <div style={brandStyle()}>
+        <Navbar.Brand>
+          <Button style={brandStyle()} onClick={() => navigate("/")}>
             <Icon path={mdiVolleyball} size={1} color={"white"} spin={5} />
             VOLEJBALALÁCI
-          </div>
+          </Button>
         </Navbar.Brand>
         <Nav>
           <NavDropdown

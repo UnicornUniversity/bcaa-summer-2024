@@ -17,7 +17,7 @@ function WillAttendBadge({ count }) {
 function componentStyle(color) {
   return {
     color: color,
-    padding: "8px",
+    padding: "8px 0",
     width: "max-content",
     display: "flex",
     alignItems: "center",
