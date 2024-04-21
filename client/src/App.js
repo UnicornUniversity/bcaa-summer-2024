@@ -11,24 +11,29 @@ function App() {
   return (
     <div style={componentStyle()}>
       <UserProvider>
-        <EventListProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<EventList />} />
-                <Route
-                  path="eventDetail"
-                  element={
-                    <EventProvider>
-                      <EventRoute />
-                    </EventProvider>
-                  }
-                />
-                <Route path="*" element={"not found"} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </EventListProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route
+                index
+                element={
+                  <EventListProvider>
+                    <EventList />
+                  </EventListProvider>
+                }
+              />
+              <Route
+                path="eventDetail"
+                element={
+                  <EventProvider>
+                    <EventRoute />
+                  </EventProvider>
+                }
+              />
+              <Route path="*" element={"not found"} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
       </UserProvider>
     </div>
   );
