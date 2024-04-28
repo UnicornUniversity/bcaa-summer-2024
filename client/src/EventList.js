@@ -9,10 +9,12 @@ import Container from "react-bootstrap/esm/Container.js";
 
 import Icon from "@mdi/react";
 import { mdiPlusBoxOutline, mdiPlusBoxMultipleOutline } from "@mdi/js";
+import ConfirmDeleteDialog from "./ConfirmDeleteDialog.js";
 
 function EventList() {
   const { eventList } = useContext(EventListContext);
   const [showEventForm, setShowEventForm] = useState(false);
+  const [showConfirmDeleteDialog, setShowConfirmDeleteDialog] = useState(false);
 
   const filteredEventList = eventList.filter(
     (event) => new Date(event.date) > new Date()
@@ -33,12 +35,19 @@ function EventList() {
       {!!showEventForm ? (
         <EventForm event={showEventForm} setShowEventForm={setShowEventForm} />
       ) : null}
+      {!!showConfirmDeleteDialog ? (
+        <ConfirmDeleteDialog
+          event={showConfirmDeleteDialog}
+          setShowConfirmDeleteDialog={setShowConfirmDeleteDialog}
+        />
+      ) : null}
       {filteredEventList.map((event) => {
         return (
           <EventCard
             key={event.id}
             event={event}
             setShowEventForm={setShowEventForm}
+            setShowConfirmDeleteDialog={setShowConfirmDeleteDialog}
           />
         );
       })}

@@ -86,6 +86,34 @@ function EventListProvider({ children }) {
     }
   }
 
+  async function handleDelete(dtoIn) {
+    setEventLoadObject((current) => ({ ...current, state: "pending" }));
+    const response = await fetch(`http://localhost:8000/event/delete`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dtoIn),
+    });
+    const responseJson = await response.json();
+
+    if (response.status < 400) {
+      setEventLoadObject((current) => {
+        const eventIndex = current.data.findIndex(
+          (e) => e.id === responseJson.id
+        );
+        current.data.splice(eventIndex, 1);
+        return { state: "ready", data: current.data };
+      });
+      return responseJson;
+    } else {
+      setEventLoadObject((current) => ({
+        state: "error",
+        data: current.data,
+        error: responseJson,
+      }));
+      throw new Error(JSON.stringify(responseJson, null, 2));
+    }
+  }
+
   async function handleAttendance(dtoIn) {
     setEventLoadObject((current) => ({ ...current, state: "pending" }));
     const response = await fetch(`http://localhost:8000/attendance/update`, {
@@ -110,7 +138,7 @@ function EventListProvider({ children }) {
   const value = {
     state: eventLoadObject.state,
     eventList: eventLoadObject.data || [],
-    handlerMap: { handleCreate, handleUpdate, handleAttendance },
+    handlerMap: { handleCreate, handleUpdate, handleDelete, handleAttendance },
   };
 
   return (

@@ -5,9 +5,9 @@ import EventDateTimeBadge from "./EventDateTimeBadge";
 import EventDetail from "./EventDetail";
 
 import Icon from "@mdi/react";
-import { mdiEyeOutline, mdiPencil } from "@mdi/js";
+import { mdiEyeOutline, mdiPencil, mdiTrashCanOutline } from "@mdi/js";
 
-function EventCard({ event, setShowEventForm }) {
+function EventCard({ event, setShowEventForm, setShowConfirmDeleteDialog }) {
   const navigate = useNavigate();
 
   return (
@@ -30,6 +30,13 @@ function EventCard({ event, setShowEventForm }) {
         </Button>
         <Button onClick={() => setShowEventForm(event)} size={"sm"}>
           <Icon path={mdiPencil} size={0.7} />
+        </Button>
+        <Button
+          onClick={() => setShowConfirmDeleteDialog(event)}
+          size={"sm"}
+          variant="danger"
+        >
+          <Icon path={mdiTrashCanOutline} size={0.7} />
         </Button>
       </div>
     </div>
