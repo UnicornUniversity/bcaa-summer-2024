@@ -75,10 +75,31 @@ function list() {
   }
 }
 
+// Method to list messages by eventId
+function listByEventId(eventId) {
+  try {
+    const files = fs.readdirSync(messageFolderPath);
+    const messageList = [];
+
+    files.forEach((file) => {
+      const fileData = JSON.parse(
+        fs.readFileSync(path.join(messageFolderPath, file), "utf8")
+      );
+
+      if (fileData.eventId === eventId) messageList.push(fileData);
+    });
+
+    return messageList;
+  } catch (error) {
+    throw { code: "failedToListMessages", message: error.message };
+  }
+}
+
 module.exports = {
   get,
   create,
   update,
   remove,
   list,
+  listByEventId,
 };

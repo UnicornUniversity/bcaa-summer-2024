@@ -1,24 +1,33 @@
 import { useContext, useState } from "react";
-import { EventListContext } from "./EventListContext.js";
+import { EventContext } from "./EventContext.js";
+import { UserContext } from "./UserContext.js";
 
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import CloseButton from "react-bootstrap/CloseButton";
 import Alert from "react-bootstrap/Alert";
+import Editor from "react-simple-wysiwyg";
 
 import Icon from "@mdi/react";
 import { mdiLoading } from "@mdi/js";
 
-function ConfirmDeleteDialog({ setShowConfirmDeleteDialog, event }) {
-  const { state, handlerMap } = useContext(EventListContext);
+function MessageForm({ setShowMessageForm, event }) {
+  const { state, handlerMap } = useContext(EventContext);
+  const { loggedInUser } = useContext(UserContext);
   const [showAlert, setShowAlert] = useState(null);
+  const [html, setHtml] = useState("");
+
+  function onChange(e) {
+    setHtml(e.target.value);
+  }
+
   const isPending = state === "pending";
 
   return (
-    <Modal show={true} onHide={() => setShowConfirmDeleteDialog(false)}>
+    <Modal show={true} onHide={() => setShowMessageForm(false)}>
       <Modal.Header>
-        <Modal.Title>Smazat událost</Modal.Title>
-        <CloseButton onClick={() => setShowConfirmDeleteDialog(false)} />
+        <Modal.Title>Vytvořit zprávu</Modal.Title>
+        <CloseButton onClick={() => setShowMessageForm(false)} />
       </Modal.Header>
       <Modal.Body style={{ position: "relative" }}>
         <Alert
@@ -35,30 +44,34 @@ function ConfirmDeleteDialog({ setShowConfirmDeleteDialog, event }) {
             <Icon path={mdiLoading} size={2} spin />
           </div>
         ) : null}
-        Opravdu chcete smazat událost {event.name}?
+        <Editor value={html} onChange={onChange} />
       </Modal.Body>
       <Modal.Footer>
         <Button
           variant="secondary"
-          onClick={() => setShowConfirmDeleteDialog(false)}
+          onClick={() => setShowMessageForm(false)}
           disabled={isPending}
         >
           Zavřít
         </Button>
         <Button
-          variant="danger"
+          variant="primary"
           disabled={isPending}
-          onClick={async (e) => {
+          onClick={async () => {
             try {
-              await handlerMap.handleDelete({ id: event.id });
-              setShowConfirmDeleteDialog(false);
+              await handlerMap.handleCreateMessage({
+                text: html,
+                eventId: event.id,
+                userId: loggedInUser.id,
+              });
+              setShowMessageForm(false);
             } catch (e) {
               console.error(e);
               setShowAlert(e.message);
             }
           }}
         >
-          Smazat
+          Vytvořit
         </Button>
       </Modal.Footer>
     </Modal>
@@ -80,4 +93,4 @@ function pendingStyle() {
   };
 }
 
-export default ConfirmDeleteDialog;
+export default MessageForm;

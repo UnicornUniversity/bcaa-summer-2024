@@ -5,6 +5,7 @@ addFormats(ajv);
 
 const eventDao = require("../../dao/event-dao.js");
 const attendanceDao = require("../../dao/attendance-dao.js");
+const messageDao = require("../../dao/message-dao.js");
 
 const schema = {
   type: "object",
@@ -43,6 +44,8 @@ async function GetAbl(req, res) {
 
     const attendanceMap = attendanceDao.eventMap();
     event.userMap = attendanceMap[reqParams.id] || {};
+
+    event.messageList = messageDao.listByEventId(event.id);
 
     res.json(event);
   } catch (e) {

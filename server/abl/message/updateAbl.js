@@ -9,9 +9,7 @@ const schema = {
   type: "object",
   properties: {
     id: { type: "string" },
-    date: { type: "string", format: "date-time" },
-    name: { type: "string" },
-    message: { type: "string" },
+    text: { type: "string" },
   },
   required: ["id"],
   additionalProperties: false,

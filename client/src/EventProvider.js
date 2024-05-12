@@ -1,24 +1,21 @@
 import { useEffect, useState } from "react";
-import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import { EventContext } from "./EventContext.js";
 
 function EventProvider({ children }) {
   const [eventLoadObject, setEventLoadObject] = useState({
-    state: "ready",
+    state: "pending",
     error: null,
     data: null,
   });
   const location = useLocation();
-  console.log(location);
 
-  const [searchParams] = useSearchParams();
-
-  console.log(searchParams.get("id"));
-
+  /* eslint-disable */
   useEffect(() => {
     handleLoad();
   }, []);
+  /* eslint-enable */
 
   async function handleLoad() {
     setEventLoadObject((current) => ({ ...current, state: "pending" }));
@@ -31,6 +28,7 @@ function EventProvider({ children }) {
       }
     );
     const responseJson = await response.json();
+
     if (response.status < 400) {
       setEventLoadObject({ state: "ready", data: responseJson });
       return responseJson;
@@ -40,11 +38,34 @@ function EventProvider({ children }) {
         data: current.data,
         error: responseJson.error,
       }));
-      throw new Error(JSON.stringify(responseJson, null, 2));
     }
   }
+
+  async function handleCreateMessage(dtoIn) {
+    const response = await fetch(`http://localhost:8000/message/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dtoIn),
+    });
+    const responseJson = await response.json();
+
+    if (response.status < 400) {
+      handleLoad();
+    } else {
+      setEventLoadObject((current) => ({
+        state: "error",
+        data: current.data,
+        error: responseJson.error,
+      }));
+    }
+  }
+
   const value = {
+    state: eventLoadObject.state,
     event: eventLoadObject.data,
+    handlerMap: { handleCreateMessage },
   };
 
   return (

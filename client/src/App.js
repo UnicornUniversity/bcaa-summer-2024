@@ -6,6 +6,7 @@ import UserProvider from "./UserProvider";
 import EventListProvider from "./EventListProvider";
 import EventProvider from "./EventProvider";
 import EventRoute from "./EventRoute";
+import Chart from "./Chart";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
                     </EventProvider>
                   }
                 />
+                <Route path="chart" element={<Chart />} />
                 <Route path="*" element={"not found"} />
               </Route>
             </Routes>

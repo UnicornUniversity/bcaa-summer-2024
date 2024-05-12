@@ -22,7 +22,7 @@ function EventForm({ setShowEventForm, event }) {
           e.preventDefault();
           e.stopPropagation();
           var formData = Object.fromEntries(new FormData(e.target));
-          formData.date = new Date(formData.date).toISOString();
+          // formData.date = new Date(formData.date).toISOString();
           try {
             if (event.id) {
               formData.id = event.id;
@@ -66,7 +66,7 @@ function EventForm({ setShowEventForm, event }) {
             <Form.Control
               type="datetime-local"
               name="date"
-              required
+              // required
               defaultValue={
                 event.date ? eventDateToInput(event.date) : undefined
               }
@@ -77,7 +77,7 @@ function EventForm({ setShowEventForm, event }) {
             <Form.Control
               type="text"
               name="name"
-              required
+              // required
               defaultValue={event.name}
             />
           </Form.Group>
