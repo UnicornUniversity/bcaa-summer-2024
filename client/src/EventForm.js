@@ -22,7 +22,7 @@ function EventForm({ setShowEventForm, event }) {
           e.preventDefault();
           e.stopPropagation();
           var formData = Object.fromEntries(new FormData(e.target));
-          // formData.date = new Date(formData.date).toISOString();
+          formData.date = new Date(formData.date).toISOString();
           try {
             if (event.id) {
               formData.id = event.id;
